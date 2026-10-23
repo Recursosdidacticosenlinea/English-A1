@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CAA English A1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: a study-planner page. Header with progress and the 5-step route, then 10 modules (5 units each) built on the CEFR A1 descriptors. */
+:root{
+  --bg:#f3f5fa; --surface:#ffffff; --ink:#14213d; --muted:#56607a; --line:#d9deea;
+  --accent:#1f4fd1; --accent-soft:#e3eafc; --gold:#f2b705; --gold-ink:#5c4300;
+  --new:#0f7a5a; --new-soft:#dcf3ea; --soon:#8a5a00; --soon-soft:#fbefd2;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1424; --surface:#161e33; --ink:#e8ecf6; --muted:#9aa5c0; --line:#2a3552;
+  --accent:#8eabff; --accent-soft:#1f2c52; --gold:#f2c23a; --gold-ink:#f2c23a;
+  --new:#5fd3a9; --new-soft:#123a2e; --soon:#f0c062; --soon-soft:#3a2d10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1424; --surface:#161e33; --ink:#e8ecf6; --muted:#9aa5c0; --line:#2a3552;
+  --accent:#8eabff; --accent-soft:#1f2c52; --gold:#f2c23a; --gold-ink:#f2c23a;
+  --new:#5fd3a9; --new-soft:#123a2e; --soon:#f0c062; --soon-soft:#3a2d10; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5vw,3.1rem);line-height:1.05;margin:.35em 0 .3em;text-wrap:balance}
+h1 span{background:linear-gradient(transparent 62%,var(--gold) 62%,var(--gold) 90%,transparent 90%);padding:0 .08em}
+.lead{max-width:62ch;color:var(--muted);font-size:1.08rem;margin:0}
+h2{font-family:var(--display);font-weight:700;font-size:1.45rem;margin:0;text-wrap:balance}
+/* Progress */
+.progress{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar{flex:1 1 240px;max-width:420px;height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--new);border-radius:99px;transition:width .4s ease}
+.progress b{font-variant-numeric:tabular-nums}
+/* Route */
+.route{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.route ol{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:s}
+.route li{counter-increment:s;position:relative;padding:12px;border-radius:10px;background:var(--bg);min-width:0}
+.route li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--accent);display:block;line-height:1}
+.route b{display:block;margin-top:6px}
+.route small{color:var(--muted);font-size:.86rem;display:block}
+.skills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.skills i{font-style:normal;font-size:.74rem;padding:1px 7px;border-radius:99px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+.evidence{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.evidence div{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--muted)}
+.evidence strong{color:var(--ink)}
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:40px 0 18px}
+.controls label{font-weight:700;font-size:.9rem}
+#q{flex:1 1 220px;min-width:0;font:inherit;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.88rem;font-weight:700;padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* Modules & cards */
+.group{margin-top:36px}
+.group-head{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;margin-bottom:14px}
+.mod-num{grid-row:span 2;font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;color:var(--accent)}
+.group-head .count{color:var(--muted);font-size:.9rem;margin-left:8px;font-weight:400;font-family:var(--body)}
+.cando{margin:0;color:var(--muted);font-size:.93rem;max-width:75ch}
+.cando em{font-style:normal;font-weight:700;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lvl{font-family:var(--display);font-weight:800;font-size:.82rem;padding:3px 9px;border-radius:6px;background:var(--gold);color:#2b2000;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.status{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:99px}
+.st-progress{background:var(--new-soft);color:var(--new)}
+.card h3{font-family:var(--display);font-weight:700;font-size:1.2rem;line-height:1.2;margin:4px 0 0;text-wrap:balance}
+.focus{color:var(--muted);font-size:.93rem;margin:0}
+.card .go{margin-top:auto;padding-top:8px}
+.card a.btn{display:inline-block;font-weight:700;text-decoration:none;color:var(--surface);background:var(--accent);padding:8px 14px;border-radius:9px}
+.card a.btn:hover{filter:brightness(1.08)}
+.empty{color:var(--muted);padding:20px;border:1px dashed var(--line);border-radius:12px;text-align:center}
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+@media (max-width:760px){.route ol{grid-template-columns:repeat(2,minmax(0,1fr))}.route li:last-child{grid-column:1/-1}.evidence{grid-template-columns:1fr}.mod-num{font-size:1.9rem}}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .15s ease,border-color .15s}.card:hover{transform:translateY(-2px);border-color:var(--accent)}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CAA Virtual · BUAP · English A1 · CEFR</div>
+    <h1>English A1: <span>50 units</span> to get started</h1>
+    <p class="lead">Ten modules based on the Common European Framework of Reference (CEFR) for level A1. Go in order or choose any unit. Every unit takes about 50 minutes and you can come back any time.</p>
+    <div class="progress" aria-live="polite">
+      <div class="bar" role="progressbar" aria-label="Units completed" aria-valuemin="0" aria-valuemax="50" id="bar"><i></i></div>
+      <span><b id="done-count">0</b> of 50 units completed</span>
+    </div>
+  </header>
+
+  <section class="route" aria-labelledby="route-h">
+    <h2 id="route-h">How every unit works</h2>
+    <ol>
+      <li><b>Presentation</b><small>Meet the topic in a real situation.</small></li>
+      <li><b>Objectives</b><small>See what you will be able to do.</small></li>
+      <li><b>Explanation</b><small>Vocabulary, grammar and examples.</small></li>
+      <li><b>Practice</b><small>Four skills:</small><span class="skills"><i>Listening</i><i>Reading</i><i>Writing</i><i>Speaking</i></span></li>
+      <li><b>Self-assessment</b><small>Rate six "I can…" statements from 1 to 5.</small></li>
+    </ol>
+    <div class="evidence">
+      <div><strong>Writing evidence:</strong> write and submit your text directly in the unit.</div>
+      <div><strong>Speaking evidence:</strong> record your task and upload it to your course platform.</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <label for="q">Find a unit</label>
+    <input id="q" type="search" placeholder="Try “food”, “past” or “can”" autocomplete="off">
+    <div class="chips" role="group" aria-label="Filter by module" id="mods"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer>CAA Virtual · BUAP · Level A1 (CEFR) · Your progress is saved on this device only.</footer>
+</div>
+
+<script>
+/* ===== Units on the home page =====
+   To add a unit: copy the _template folder, rename it (e.g. "my-new-unit"),
+   edit its data.js (slug, number), then add one line here with url: "my-new-unit/" and its module (mod). */
+const UNITS = [
+  {n:1,  mod:1,  title:"Hello and Goodbye",            focus:"Greetings, the alphabet and classroom instructions",  url:"hello-and-goodbye/"},
+  {n:2,  mod:1,  title:"Hi, My Name Is…",              focus:"Verb to be: name, age, city and job",                 url:"hi-my-name-is/"},
+  {n:3,  mod:1,  title:"Numbers Everywhere",           focus:"Numbers 0–100, phone numbers and emails",             url:"numbers-everywhere/"},
+  {n:4,  mod:1,  title:"Where Are You From?",          focus:"Countries, nationalities and yes/no questions",       url:"where-are-you-from/"},
+  {n:5,  mod:1,  title:"What's Your Job?",             focus:"Jobs, workplaces and a / an",                         url:"whats-your-job/"},
+  {n:6,  mod:2,  title:"This Is My Family",            focus:"Family, possessive adjectives and 's",                url:"this-is-my-family/"},
+  {n:7,  mod:2,  title:"Describing Myself and Others", focus:"Appearance and personality with be and have",         url:"describing-myself-and-others/"},
+  {n:8,  mod:2,  title:"My Best Friend",               focus:"Personality adjectives, very / quite, and / but",     url:"my-best-friend/"},
+  {n:9,  mod:2,  title:"Have You Got a Pet?",          focus:"Have got / has got and animals",                      url:"have-you-got-a-pet/"},
+  {n:10, mod:2,  title:"Can You Swim?",                focus:"Can / can't for abilities",                           url:"can-you-swim/"},
+  {n:11, mod:3,  title:"What Is This?",                focus:"This / that / these / those, plurals and colors",     url:"what-is-this/"},
+  {n:12, mod:3,  title:"What Is in Your Room?",        focus:"There is / there are and prepositions of place",      url:"what-is-in-your-room/"},
+  {n:13, mod:3,  title:"Welcome to My Home",           focus:"Rooms, Is there…? Are there any…? How many…?",        url:"welcome-to-my-home/"},
+  {n:14, mod:3,  title:"My Neighborhood",              focus:"Places in town: next to, opposite, between",          url:"my-neighborhood/"},
+  {n:15, mod:3,  title:"Turn Left, Turn Right",        focus:"Imperatives for giving directions",                   url:"turn-left-turn-right/"},
+  {n:16, mod:4,  title:"What Time Is It?",             focus:"Telling the time: o'clock, half past, quarter to",    url:"what-time-is-it/"},
+  {n:17, mod:4,  title:"When Is Your Birthday?",       focus:"Dates, ordinal numbers and in / on / at",             url:"when-is-your-birthday/"},
+  {n:18, mod:4,  title:"My Daily Routine",             focus:"Present simple for habits and routines",              url:"my-daily-routine/"},
+  {n:19, mod:4,  title:"Who Does the Chores?",         focus:"Present simple he / she: does, doesn't",              url:"who-does-the-chores/"},
+  {n:20, mod:4,  title:"My School Day",                focus:"School subjects, timetables and because",             url:"my-school-day/"},
+  {n:21, mod:5,  title:"What Do You Like Doing?",      focus:"Love, like, hate + -ing for hobbies",                 url:"what-do-you-like-doing/"},
+  {n:22, mod:5,  title:"Do You Play Sports?",          focus:"Play / go / do and Do you…? questions",               url:"do-you-play-sports/"},
+  {n:23, mod:5,  title:"Music and Movies",             focus:"Object pronouns: me, him, her, them…",                url:"music-and-movies/"},
+  {n:24, mod:5,  title:"Let's Go Out!",                focus:"Suggestions and invitations: Let's…, Would you like…?", url:"lets-go-out/"},
+  {n:25, mod:5,  title:"My Phone and Me",              focus:"Wh- questions in the present simple",                 url:"my-phone-and-me/"},
+  {n:26, mod:6,  title:"I'm Hungry!",                  focus:"Food, countable and uncountable nouns, a / an / some", url:"im-hungry/"},
+  {n:27, mod:6,  title:"Is There Any Milk?",           focus:"Some / any, how much / how many, quantities",         url:"is-there-any-milk/"},
+  {n:28, mod:6,  title:"At the Café",                  focus:"Ordering: I'd like…, Can I have…?",                   url:"at-the-cafe/"},
+  {n:29, mod:6,  title:"How Much Is It?",              focus:"Prices, money and numbers 100–1,000",                 url:"how-much-is-it/"},
+  {n:30, mod:6,  title:"Breakfast Around the World",   focus:"Customs, adverbs of frequency and tastes",            url:"breakfast-around-the-world/"},
+  {n:31, mod:7,  title:"What Are You Doing?",          focus:"Present progressive for actions happening now",       url:"what-are-you-doing/"},
+  {n:32, mod:7,  title:"What Are You Wearing?",        focus:"Clothes and the present continuous",                  url:"what-are-you-wearing/"},
+  {n:33, mod:7,  title:"Can I Try It On?",             focus:"Shopping for clothes: sizes, one / ones, too",        url:"can-i-try-it-on/"},
+  {n:34, mod:7,  title:"What's the Weather Like?",     focus:"Weather, seasons, it's raining vs. it rains",         url:"whats-the-weather-like/"},
+  {n:35, mod:7,  title:"Greetings From…",              focus:"Postcards: present simple vs. continuous",            url:"greetings-from/"},
+  {n:36, mod:8,  title:"How Do You Get to School?",    focus:"Transportation, by bus, How long does it take?",      url:"how-do-you-get-to-school/"},
+  {n:37, mod:8,  title:"At the Bus Station",           focus:"Buying tickets and timetables",                       url:"at-the-bus-station/"},
+  {n:38, mod:8,  title:"My Hometown",                  focus:"Describing places, famous for…",                      url:"my-hometown/"},
+  {n:39, mod:8,  title:"At the Hotel",                 focus:"Checking in and requests with can",                   url:"at-the-hotel/"},
+  {n:40, mod:8,  title:"Let's Celebrate!",             focus:"Festivals, traditions and in / on / at",              url:"lets-celebrate/"},
+  {n:41, mod:9,  title:"What's the Matter?",           focus:"The body, health problems and advice",                url:"whats-the-matter/"},
+  {n:42, mod:9,  title:"School Rules",                 focus:"Can / can't for permission and rules",                url:"school-rules/"},
+  {n:43, mod:9,  title:"Can You Help Me?",             focus:"Asking for and offering help",                        url:"can-you-help-me/"},
+  {n:44, mod:9,  title:"I Want to Be…",                focus:"Want to / would like to for dreams",                  url:"i-want-to-be/"},
+  {n:45, mod:9,  title:"Sorry, I'm Late!",             focus:"Apologies and reasons: because, so, but",             url:"sorry-im-late/"},
+  {n:46, mod:10, title:"Where Were You?",              focus:"Past of be: was / were, there was / were",            url:"where-were-you/"},
+  {n:47, mod:10, title:"What Did You Do?",             focus:"Past simple: regular verbs",                          url:"what-did-you-do/"},
+  {n:48, mod:10, title:"My Last Birthday",             focus:"Past simple: irregular verbs and stories",            url:"my-last-birthday/"},
+  {n:49, mod:10, title:"Next Weekend",                 focus:"Be going to for plans",                               url:"next-weekend/"},
+  {n:50, mod:10, title:"This Is Me!",                  focus:"A1 review and final project",                         url:"this-is-me/"}
+];
+
+/* Modules with a CEFR A1 can-do statement each. */
+const MODULES = [
+  {mod:1,  name:"Hello!",                          cando:"I can introduce myself and others and ask and answer questions about personal details."},
+  {mod:2,  name:"People in My Life",               cando:"I can describe my family, friends and pets, and say what people can do."},
+  {mod:3,  name:"Things and Places",               cando:"I can describe objects, my home and my neighborhood, and understand simple directions."},
+  {mod:4,  name:"Time and Routines",               cando:"I can tell the time, say dates and describe my daily routine."},
+  {mod:5,  name:"Free Time",                       cando:"I can talk about hobbies and likes, and make, accept or refuse simple invitations."},
+  {mod:6,  name:"Food and Drink",                  cando:"I can talk about food, order in a café and ask about prices and quantities."},
+  {mod:7,  name:"Right Now",                       cando:"I can say what is happening now, describe clothes and the weather, and write a postcard."},
+  {mod:8,  name:"Getting Around",                  cando:"I can use transport, buy tickets, check in at a hotel and describe places and celebrations."},
+  {mod:9,  name:"Everyday Needs",                  cando:"I can say how I feel, ask for permission and help, talk about wishes and apologize."},
+  {mod:10, name:"Looking Back, Looking Forward",   cando:"I can talk about simple past events and future plans, and present myself in English."}
+];
+let mod = 0; /* 0 = all */
+
+const chipsEl = document.getElementById("mods");
+[{mod:0}].concat(MODULES).forEach(m=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.type="button"; b.id="mod-"+m.mod;
+  b.textContent = m.mod ? "Module " + m.mod : "All";
+  if (m.mod) b.title = m.name;
+  b.setAttribute("aria-pressed", m.mod===mod ? "true":"false");
+  b.addEventListener("click",()=>{mod=m.mod;[...chipsEl.children].forEach(c=>c.setAttribute("aria-pressed",c===b?"true":"false"));render();});
+  chipsEl.appendChild(b);
+});
+document.getElementById("q").addEventListener("input",render);
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function done(u){ try { const s=JSON.parse(localStorage.getItem("a1:"+u.url.replace(/\/$/,""))||"{}"); return s.self && Object.keys(s.self).length>=6; } catch(e){ return false; } }
+
+function progress(){
+  const n = UNITS.filter(done).length;
+  document.getElementById("done-count").textContent = n;
+  const bar = document.getElementById("bar");
+  bar.setAttribute("aria-valuenow", n);
+  bar.firstElementChild.style.width = (n / UNITS.length * 100) + "%";
+}
+
+function render(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const list=document.getElementById("list"); list.innerHTML="";
+  let shown=0;
+  MODULES.forEach(g=>{
+    const items=UNITS.filter(u=>u.mod===g.mod
+      && (!mod || u.mod===mod)
+      && (!q || (u.title+" "+u.focus+" "+g.name).toLowerCase().includes(q)));
+    if(!items.length) return;
+    shown+=items.length;
+    const sec=document.createElement("section"); sec.className="group"; sec.id="module-"+g.mod;
+    sec.innerHTML=`<div class="group-head"><span class="mod-num" aria-hidden="true">${g.mod}</span>
+      <h2>Module ${g.mod} · ${esc(g.name)}<span class="count">${items.length} unit${items.length>1?"s":""}</span></h2>
+      <p class="cando"><em>CEFR A1:</em> ${esc(g.cando)}</p></div>`;
+    const grid=document.createElement("div"); grid.className="grid";
+    items.forEach(u=>{
+      const badge = done(u) ? `<span class="status st-progress">Completed</span>` : "";
+      grid.insertAdjacentHTML("beforeend",
+        `<article class="card"><div class="top"><span class="lvl">Unit ${u.n}</span>${badge}</div>
+         <h3>${esc(u.title)}</h3><p class="focus">${esc(u.focus)}</p><div class="go"><a class="btn" href="${esc(u.url)}">Start unit →</a></div></article>`);
+    });
+    sec.appendChild(grid); list.appendChild(sec);
+  });
+  if(!shown) list.innerHTML=`<p class="empty">No units match. Try another word or choose “All”.</p>`;
+}
+progress();
+render();
+</script>
+</body>
+</html>
